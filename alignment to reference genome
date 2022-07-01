@@ -5,6 +5,8 @@ scp GSF3279-CS* /geode2/home/u010/amahapat/Carbonate/GSF3279    ** type in Hundl
 
 conda activate rnaseq
 
+# unzip .gz files
+
 gzip -d GSF3279*.gz
 
 # Unload system perl for compatability with entrez-direct.
