@@ -1,1 +1,43 @@
 
+# Open R studio on ThinLinc
+# Using Console, load tidyverse
+
+library(“tidyverse”)
+
+library(DESeq2)
+
+                       # Error shown when tried to load DESeq2 library
+                          Loading required package: S4Vectors
+                          Loading required package: stats4
+                          Error: package ‘BiocGenerics’ required by ‘S4Vectors’ could not be found
+                          
+Restarted R session to update (error overcome)
+
+install.packages("BiocManager")
+if (!require("BiocManager", quietly = TRUE))
+ install.packages("BiocManager")
+ BiocManager::install("BiocGenerics")
+library(DESeq2)
+                       # Error: package ‘GenomicRanges’ could not be loaded
+BiocManager::install("zlibbioc")
+library(GenomicRanges)
+
+if (!require("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+BiocManager::install("BiocParallel")
+library(DESeq2)
+dds <- DESeqDataSetFromMatrix(countData = countdata,colData = coldata, design=~condition)
+
+keep = rowSums(counts(dds)) >= 1
+
+dds <- dds[keep,]
+
+dds <- DESeq(dds)
+
+res <- results(dds)
+
+resdata <- merge(as.data.frame(res),as.data.frame(counts(dds,normalized=TRUE)),by="row.names",sort=FALSE)
+
+names(resdata)[1] <- "Gene"
+
+write.csv(resdata,file="/geode2/home/u010/amahapat/Carbonate/GSF3279/results/N2neuralcellsvsadr1neuralcellsdiffexp.csv")
